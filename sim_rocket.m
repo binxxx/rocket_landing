@@ -6,8 +6,11 @@ function sim_rocket(x0, wind)
     consts = get_consts() ;
     
     if(nargin < 1)
-        x0 = [10; 150; 0; 0;
-          0; 0; 0; 0;
+%         x0 = [10; 150; 0; 0;
+%           0; 0; 0; 0;
+%           consts.m_nofuel+1.0*consts.max.m_fuel] ;
+        x0 = [100; 1500; 0; 0;
+          10; -10; 0; 0;
           consts.m_nofuel+1.0*consts.max.m_fuel] ;
         wind = 0 ;
     end
@@ -41,6 +44,8 @@ function sim_rocket(x0, wind)
     % Animation
     u = zeros(length(t), 2) ;
     for j=1:length(t)
+%         size(x(j,:))
+%         size(t)
         [dx uu] = odefun_rocket(t, x(j,:)', wind, consts, ctrl) ;
         u(j,:) = uu' ;
     end
