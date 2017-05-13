@@ -9,10 +9,13 @@ JT = consts.JT;
 L = consts.L;
 syms y z th psi dy dz dth dpsi m u1 u2 real;
 % whole dynamic system
-f = [dy; dz; dth; dpsi; -gam/m*sin(th+psi)*u1; -g+gam/m*cos(th+psi)*u1; -L/J*gam*sin(psi)*u1; 
-   1/JT*u2; -u1];
-x = [y;z;th;psi;dy;dz;dth;dpsi;m];
+% f = [dy; dz; dth; dpsi; -gam/m*sin(th+psi)*u1; -g+gam/m*cos(th+psi)*u1; -L/J*gam*sin(psi)*u1; 
+%    1/JT*u2; -u1];
+% x = [y;z;th;psi;dy;dz;dth;dpsi;m];
 u = [u1;u2];
+
+f = [dth; dpsi; -L/J*gam*sin(psi)*u1; 1/JT*u2; -u1];
+x = [th;psi;dth;dpsi;m];
 % linearize
 A = jacobian(f,x)
 B = jacobian(f,u)

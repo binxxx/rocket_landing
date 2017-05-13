@@ -6,11 +6,11 @@ function sim_rocket(x0, wind)
     consts = get_consts() ;
     
     if(nargin < 1)
-%         x0 = [10; 150; 0; 0;
-%           0; 0; 0; 0;
+%         x0 = [100; 25; 0; 0;
+%           10; 10; 0; 0;
 %           consts.m_nofuel+1.0*consts.max.m_fuel] ;
-        x0 = [100; 1500; 0; 0;
-          10; -10; 0; 0;
+        x0 = [10; 1500; 1*179/180*pi; 0;
+                0; 0; 1*179/180*pi; 0;
           consts.m_nofuel+1.0*consts.max.m_fuel] ;
         wind = 0 ;
     end

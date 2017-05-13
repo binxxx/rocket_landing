@@ -14,17 +14,29 @@ function u = student_controller(t, x, consts, ctrl)
     x_d = [0;consts.L;0;0; 0;0;0;0;  m_d] ;
     u_ff = [m_d*consts.g / consts.gamma ; 0] ;
     
-    
+    % extract attitude
+    th = x(3); psi = x(4); dth = x(7); dpsi = x(8); m = x(9);
+    u1 = u_ff(1); u2 = u_ff(2);
+    x_d_attd = [0;0;0;0;m_d];
     % Output control input [thrust; torque]
-    u =  u_ff - ctrl.K*(x - x_d) ;
+    if (sqrt(th^2+dth^2) > 2 && sqrt(th^2+dth^2) <= 2.5 )
+        u = u_ff - ctrl.K_attd1*([th;psi;dth;dpsi;m] - x_d_attd) ;
+    elseif (sqrt(th^2+dth^2) > 2.5  )
+        u = u_ff - ctrl.K_attd2*([th;psi;dth;dpsi;m] - x_d_attd) ;
+    elseif (x(2) < 25)
+        u =  u_ff - ctrl.K*(x - x_d) ;
+    elseif (x(2) >= 25 && x(2) <= 50)
+        u = u_ff - ctrl.K*(x - [0;20;0;0; 0;0;0;0;  m_d]) ;
+    else
+        u = u_ff - ctrl.K*(x - [0;x(2)/2;0;0; 0;0;0;0;  m_d]) ;
+    end
+%     if (sqrt(th^2+dth^2) > 0.2 && isempty(FLAG))
+%         u = u_ff - ctrl.K_attd*([th;psi;dth;dpsi;m]-x_d_attd) ;
+%         1;
+%     else
+%         u =  u_ff - ctrl.K*(x - x_d) ;
+%         FLAG = 1;
+%         2;
+%     end
     
-    %% trial
-%     K = ctrl.K;
-%     u1 =(-K(1,1)*x(1)-K(1,5)*x(5))/cos(x(1))...
-%         -K(1,2)*x(2)-K(1,3)*x(3)-K(1,4)*x(4)-K(1,6)*x(6)...
-%         -K(1,7)*x(7)-K(1,8)*x(8)-K(1,9)*x(9);
-%     u2 =(-K(2,1)*x(1)-K(2,5)*x(5))/cos(x(1))...
-%         -K(2,2)*x(2)-K(2,3)*x(3)-K(2,4)*x(4)-K(2,6)*x(6)...
-%         -K(2,7)*x(7)-K(2,8)*x(8)-K(2,9)*x(9);
-%     u = u_ff + [u1;u2];
 end
